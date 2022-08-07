@@ -7,7 +7,8 @@ import {
 import './App.css';
 import CompanyData from './company'
 import React from 'react';
-import {Button, Dropdown} from "react-bootstrap";
+import {Button, Dropdown, Form} from "react-bootstrap";
+import ActivityItemView from './views/activity-detail';
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -36,7 +37,7 @@ function App() {
       <header>
         <nav className='navbar bg-light'>
           <a className="navbar-brand" href="/">Sharepoint - Dealflow App</a>
-          <div className='col-3 text-right'>
+          <div className='col-3 justify-content-between'>
             <span className="nav-item">
               <a className="nav-link inline" href="/edit">News Feed</a>
             </span>
@@ -47,32 +48,38 @@ function App() {
         </nav>
       </header>
       <main className='row'>
-        <div className='col-2'>
-          <div className='d-grid gap-2 d-md-flex justify-content-md-end mb-2'>
-            <Button>Add</Button>
+        <div className='col-2 pt-1'>
+          <div className='d-grid gap-2 d-md-flex justify-content-md-between mb-2'>
+            <Form className="d-flex">
+              <Form.Control
+                type="search"
+                placeholder="Search Company"
+                className="me-1"
+                aria-label="Search"
+              />
+            </Form>
+            <Button size="sm">Add Corp</Button>
           </div>
-          {
-            dataList.map((v, i) => {
-              return (
-                <div
-                  className={`row border-top ${i===index?"activeItem":""}`}
-                  key={i}
-                >
-                  <div className="col">
-                    <a href={`company/${v.Id}`}>
-                      {v.Name}
-                    </a>
-                  </div>
-                </div>
-              );
-            })
-          }
+          <div className='col list-group'>
+            {
+              dataList.map((v, i) => {
+                return (
+                  <a
+                    className={`list-group-item list-group-item-action lh-tight ${i===index?"active":""}`}
+                    key={i} href={`company/${v.Id}`}
+                  >
+                    {v.Name}
+                  </a>
+                );
+              })
+            }
+          </div>
         </div>
         <div className='col-6'>
           <div
             className='row'
           >
-            <div className='col-5'>
+            <div className='col-5 pt-3'>
               <div className='col-12 mb-3'>
                 <h2 className='h3'>
                   {dataList[index].Name}
@@ -87,7 +94,7 @@ function App() {
                   </Dropdown>
                 </h2>
               </div>
-              <div className='col mb-3'>
+              <div className='col-5 mb-3 mt-1'>
                 <a href={dataList[index].Url}>
                   Company Web
                 </a>
@@ -96,62 +103,38 @@ function App() {
                 {dataList[index].Description}
               </div>
             </div>
-            <div className='col-7 px-5'>
+            <div className='col-7 px-3 pt-2'>
               <div className='d-grid gap-2 d-md-flex justify-content-md-end mb-2'>
-                <Button>Add</Button>
+                <Button size="sm">Add Report</Button>
               </div>
-              {
-                dataList[index].Activity.map((v, i) => {
-                  return (
-                    <div
-                      className={`row border-top ${i===index2?"activeItem":""}`}
-                      key={i}
-                    >
-                      <div className="col-8">
-                        {v.Title}
-                      </div>
-                      <div className="col-4">
-                        {formatDate(v.Date)}
-                      </div>
-                    </div>
-                  );
-                })
-              }
+              <div className='list-group'>
+                {
+                  dataList[index].Activity.map((v, i) => {
+                    return (
+                      <a
+                        className={`list-group-item list-group-item-action lh-tight ${i===index2?"active":""}`}
+                        key={i} href={`company/${v.Id}`}
+                      >
+                        <div className="row">
+                          <div className="col-8">
+                            {v.Title}
+                          </div>
+                          <div className="col-4">
+                            {formatDate(v.Date)}
+                          </div>
+                        </div>
+                      </a>
+                    );
+                  })
+                }
+              </div>
             </div>
           </div>
         </div>
         <div
-          className='col-4'
+          className='col-4 pt-3'
         >
-          <div
-            className='row'
-          >
-            <div className='col-5 text-muted'>
-              {formatDate(dataList[index].Activity[index2].Date)}
-            </div>
-            <div className='col-6 text-muted'>
-              {dataList[index].Activity[index2].author}
-            </div>
-            <div className='col-1 text-muted text-right'>
-              <Dropdown className='h3 text-muted'>
-                <Dropdown.Toggle
-                  as={CustomToggle}
-                />
-                <Dropdown.Menu>
-                  <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
-                  <Dropdown.Item eventKey="2">GetLink</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            <div className='col-12'>
-              <h2 className='h3 my-3'>
-                {dataList[index].Activity[index2].Title}
-              </h2>
-            </div>
-            <div className='col-12'>
-              <p>{dataList[index].Activity[index2].Body}</p>
-            </div>
-          </div>
+          <ActivityItemView ItemId={index2} Item={dataList[index].Activity[index2]} />
         </div>
       </main>
       <footer
