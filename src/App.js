@@ -8,7 +8,8 @@ import './App.css';
 import CompanyData from './company'
 import React from 'react';
 import {Button, Dropdown, Form} from "react-bootstrap";
-import ActivityItemView from './views/activity-detail';
+import ActivityItemView from './views/ActivityItem';
+import ItemList from './utils/ListItems';
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -60,20 +61,9 @@ function App() {
             </Form>
             <Button size="sm">Add Corp</Button>
           </div>
-          <div className='col list-group'>
-            {
-              dataList.map((v, i) => {
-                return (
-                  <a
-                    className={`list-group-item list-group-item-action lh-tight ${i===index?"active":""}`}
-                    key={i} href={`company/${v.Id}`}
-                  >
-                    {v.Name}
-                  </a>
-                );
-              })
-            }
-          </div>
+          <ItemList active={index} fields={[{name:"Name", width:12}]}>
+            {dataList}
+          </ItemList>
         </div>
         <div className='col-6'>
           <div
@@ -107,27 +97,9 @@ function App() {
               <div className='d-grid gap-2 d-md-flex justify-content-md-end mb-2'>
                 <Button size="sm">Add Report</Button>
               </div>
-              <div className='list-group'>
-                {
-                  dataList[index].Activity.map((v, i) => {
-                    return (
-                      <a
-                        className={`list-group-item list-group-item-action lh-tight ${i===index2?"active":""}`}
-                        key={i} href={`company/${v.Id}`}
-                      >
-                        <div className="row">
-                          <div className="col-8">
-                            {v.Title}
-                          </div>
-                          <div className="col-4">
-                            {formatDate(v.Date)}
-                          </div>
-                        </div>
-                      </a>
-                    );
-                  })
-                }
-              </div>
+              <ItemList active={index2} fields={[{name:"Title", width:8}, {name:"Date", width:4}]}>
+                {dataList[index].Activity}
+              </ItemList>
             </div>
           </div>
         </div>

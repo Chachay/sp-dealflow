@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 
-function FormatContent(prop) {
+export default function FormatContent(prop) {
   return (
     <ReactMarkdown
       components={{
@@ -11,4 +11,3 @@ function FormatContent(prop) {
     </ReactMarkdown>
   );
 };
-export default FormatContent;
